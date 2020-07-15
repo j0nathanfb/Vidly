@@ -1,5 +1,4 @@
-﻿using Antlr.Runtime.Misc;
-using System.Collections.Generic;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using Vidly.Models;
@@ -10,23 +9,30 @@ namespace Vidly.Controllers
     {
         public CustomersController()
         {
-            _customers.Add(new Customer { Id = 1, Name = "Fred" });
-            _customers.Add(new Customer { Id = 2, Name = "Barney" });
+            _context = new ApplicationDbContext();
         }
 
         // GET: Customers
         public ActionResult Index()
         {
-            return View(_customers);
+            var customers = _context.Customers.Include(c => c.MembershipType).ToList();
+
+            return View(customers);
         }
 
         public ActionResult Details(int id)
         {
-            var customer = _customers.SingleOrDefault(c => c.Id == id);
+            var customer = _context.Customers.Include(c => c.MembershipType).SingleOrDefault(c => c.Id == id);
 
             return View(customer);
         }
 
-        private readonly List<Customer> _customers = new ListStack<Customer>();
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
+
+        private readonly ApplicationDbContext _context;
+
     }
 }
