@@ -2,7 +2,10 @@
 @model List<Vidly.Models.Movie>
 
 <h2>Movies</h2>
-
+<div>
+    @Html.ActionLink("NEW MOVIE", "New", "Movies", null, new { @class = "btn btn-primary" })
+</div>
+<br/>
 @if (Model is null || Model.Count == 0)
 {
     <p>There are no movies to display</p>
@@ -19,7 +22,7 @@ else
 
         @foreach (var movie in Model)
         {
-            <tr><td>@Html.ActionLink(movie.Name, "Details", new { id = movie.Id })</td><td>@movie.Genre.Name</td></tr>
+            <tr><td>@Html.ActionLink(movie.Name, "Edit", new { id = movie.Id })</td><td>@movie.Genre.Name</td></tr>
         }
     </table>
 
